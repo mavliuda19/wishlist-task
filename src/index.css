@@ -5,7 +5,10 @@
 }
 body {
 	margin: 0;
-	background: #ffffff;
+	background: #f6f7f9;
+	font-family: 'Roboto';
+	font-style: normal;
+	overflow-y: hidden;
 }
 
 code {
