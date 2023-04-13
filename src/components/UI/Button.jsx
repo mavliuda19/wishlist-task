@@ -3,9 +3,19 @@ import { Button as MuiButton } from '@mui/material'
 import styled from 'styled-components'
 import { ReactComponent as DeleteIcon } from '../../assets/icons/delete.svg'
 
-const Button = ({ children, ...props }) => {
+const Button = ({ children, id, deleteHandler, ...props }) => {
 	return (
-		<StyledButton variant='contained' endIcon={<DeleteIcon />} {...props}>
+		<StyledButton
+			variant='contained'
+			endIcon={
+				<DeleteIcon
+					onClick={() => {
+						deleteHandler(id)
+					}}
+				/>
+			}
+			{...props}
+		>
 			{children}
 		</StyledButton>
 	)

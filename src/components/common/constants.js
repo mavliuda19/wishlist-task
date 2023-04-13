@@ -6,6 +6,7 @@ export const DATA = [
 		qty: '56 qty.',
 		price_1: 48,
 		price_2: 15.45,
+		id: 1,
 	},
 	{
 		product_code: 84387534958953,
@@ -14,6 +15,7 @@ export const DATA = [
 		qty: '56 qty.',
 		price_1: 48,
 		price_2: 15.45,
+		id: 2,
 	},
 	{
 		product_code: 84387534958953,
@@ -22,6 +24,7 @@ export const DATA = [
 		qty: '56 qty.',
 		price_1: 48,
 		price_2: 15.45,
+		id: 3,
 	},
 	{
 		product_code: 84387534958953,
@@ -30,6 +33,7 @@ export const DATA = [
 		qty: '56 qty.',
 		price_1: 48,
 		price_2: 15.45,
+		id: 4,
 	},
 	{
 		product_code: 84387534958953,
@@ -38,6 +42,7 @@ export const DATA = [
 		qty: '56 qty.',
 		price_1: 48,
 		price_2: 15.45,
+		id: 5,
 	},
 	{
 		product_code: 84387534958953,
@@ -46,5 +51,11 @@ export const DATA = [
 		qty: '56 qty.',
 		price_1: 48,
 		price_2: 15.45,
+		id: 6,
 	},
+]
+export const TABS = [
+	{ title: 'All products', id: 1 },
+	{ title: 'Phones', id: 2 },
+	{ title: 'Accessories', id: 3 },
 ]

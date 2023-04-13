@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import {
 	Table,
@@ -8,128 +8,185 @@ import {
 	TableBody,
 	Switch,
 	FormControlLabel,
-	Button,
 	Paper,
+	CircularProgress,
+	Stack,
 } from '@mui/material'
 
 import { StyledButton } from '../categories/Categories'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import ClearIcon from '@mui/icons-material/Clear'
-import { ReactComponent as BackIcon } from '../../assets/icons/back.svg'
 import { DATA } from '../common/constants'
 import ProductImage from '../../assets/images/image.png'
+import ProductForm from './ProductForm'
+import Notification from '../UI/Notification'
 
 const Products = () => {
+	const [checked, setChecked] = useState(false)
+	const [products, setProducts] = useState(DATA)
+	const [open, setOpen] = useState({
+		isOpen: false,
+		vertical: 'top',
+		horizontal: 'right',
+	})
+	const [isLoading, setIsLoading] = useState(false)
+
+	const switchHandler = (event) => {
+		setChecked(event.target.checked)
+	}
+
+	const deleteHandler = (id) => {
+		setProducts((current) => current.filter((product) => product.id !== id))
+		setOpen({ ...open, isOpen: true })
+		setIsLoading(true)
+	}
+
+	const handleClose = (event, reason) => {
+		console.log(reason)
+		if (reason === 'clickaway') {
+			return
+		}
+
+		setOpen({ ...open, isOpen: false })
+	}
+
+	useEffect(() => {
+		if (isLoading) {
+			setTimeout(() => {
+				setIsLoading(false)
+			}, 800)
+		}
+	}, [isLoading])
+
 	return (
 		<>
+			<Notification
+				open={open}
+				message='Deleted Successfully'
+				handleClose={handleClose}
+			/>
 			<Wrapper elevation={0}>
-				<StyledTable>
-					<TableHead>
-						<TableRow>
-							<StyledTableCellHead>Photo</StyledTableCellHead>
-							<StyledTableCellHead>
-								Product Code
-							</StyledTableCellHead>
-							<StyledTableCellHead>Name</StyledTableCellHead>
-							<StyledTableCellHead>Stock</StyledTableCellHead>
-							<StyledTableCellHead>QTY</StyledTableCellHead>
-							<StyledTableCellHead>Price</StyledTableCellHead>
-							<StyledTableCellHead>
-								<FormControlLabel
-									control={<Switch defaultChecked />}
-									label='Image'
-								/>
-							</StyledTableCellHead>
-						</TableRow>
-					</TableHead>
+				{isLoading ? (
+					<Stack alignItems='center'>
+						<CircularProgress />
+					</Stack>
+				) : (
+					<StyledTable>
+						<TableHead
+							sx={{
+								position: 'sticky',
+								top: '0',
+								zIndex: '1',
+								backgroundColor: ' #F6F7F9',
+							}}
+						>
+							<TableRow>
+								{checked && (
+									<StyledTableCellHead>
+										Photo
+									</StyledTableCellHead>
+								)}
 
-					<TableBody>
-						{DATA.map((item) => {
-							return (
-								<StyledTableRow>
-									<StyledTableCell>
-										<StyledImage
-											src={ProductImage}
-											alt='product img'
-										/>
-									</StyledTableCell>
-									<StyledTableCell>
-										{item.product_code}
-									</StyledTableCell>
-									<StyledTableCell>
-										<p>{item.name}</p>
-									</StyledTableCell>
-									<StyledTableCell sx={{ width: '80px' }}>
-										{item.stock}
-									</StyledTableCell>
-									<StyledTableCell sx={{ width: '80px' }}>
-										<p>{item.qty}</p>
-									</StyledTableCell>
-									<StyledTableCell sx={{ width: '100px' }}>
-										<div>
-											<p>{item.price_1}$</p>
-											{item.price_2}$
-										</div>
-									</StyledTableCell>
-									<StyledTableCellAction>
-										<StyledButton
-											sx={{ padding: '9px 14px' }}
-											variant='outlined'
+								<StyledTableCellHead>
+									Product Code
+								</StyledTableCellHead>
+								<StyledTableCellHead>Name</StyledTableCellHead>
+								<StyledTableCellHead>Stock</StyledTableCellHead>
+								<StyledTableCellHead>QTY</StyledTableCellHead>
+								<StyledTableCellHead>Price</StyledTableCellHead>
+								<StyledTableCellHead>
+									<FormControlLabel
+										control={
+											<Switch
+												checked={checked}
+												onChange={switchHandler}
+											/>
+										}
+										label='Image'
+									/>
+								</StyledTableCellHead>
+							</TableRow>
+						</TableHead>
+
+						<TableBody>
+							{products.map((item) => {
+								return (
+									<StyledTableRow key={item.id}>
+										{checked && (
+											<StyledTableCell>
+												<StyledImage
+													src={ProductImage}
+													alt='product img'
+												/>
+											</StyledTableCell>
+										)}
+
+										<StyledTableCell>
+											{item.product_code}
+										</StyledTableCell>
+										<StyledTableCell>
+											<p>{item.name}</p>
+										</StyledTableCell>
+										<StyledTableCell>
+											{item.stock}
+										</StyledTableCell>
+										<StyledTableCell>
+											<p>{item.qty}</p>
+										</StyledTableCell>
+										<StyledTableCell
+										// sx={{ width: '100px' }}
 										>
-											Add to cart
-										</StyledButton>
-										<div>
-											<FavoriteIcon color='primary' />
-										</div>
-										<ClearIcon />
-									</StyledTableCellAction>
-								</StyledTableRow>
-							)
-						})}
-					</TableBody>
-				</StyledTable>
+											<div>
+												<p>{item.price_1}$</p>
+												{item.price_2}$
+											</div>
+										</StyledTableCell>
+										<StyledTableCellAction>
+											<StyledButton
+												sx={{ padding: '9px 14px' }}
+												variant='outlined'
+											>
+												Add to cart
+											</StyledButton>
+											<div>
+												<FavoriteIcon color='primary' />
+											</div>
+											<ClearIcon
+												style={{ marginRight: '5px' }}
+												onClick={() =>
+													deleteHandler(item.id)
+												}
+											/>
+										</StyledTableCellAction>
+									</StyledTableRow>
+								)
+							})}
+						</TableBody>
+					</StyledTable>
+				)}
 			</Wrapper>
-			<Container>
-				<Button startIcon={<BackIcon />} variant='text'>
-					Back
-				</Button>
-				<div>
-					<StyledButton
-						variant='outlined'
-						sx={{ padding: '10px 116.5px' }}
-					>
-						Add product
-					</StyledButton>
-					<StyledButton
-						variant='contained'
-						sx={{ padding: '10px 120px' }}
-					>
-						Add to cart
-					</StyledButton>
-				</div>
-			</Container>
+			<ProductForm />
 		</>
 	)
 }
 
 export default Products
+
 const Wrapper = styled(Paper)`
 	&.MuiPaper-root {
 		width: 100%;
-		height: 501px;
-		overflow-y: scroll;
 		background: transparent;
 		border: none;
-		overflow-x: hidden;
-		::-webkit-scrollbar {
-			width: 7px;
-			height: 150px;
-		}
-		::-webkit-scrollbar-thumb {
-			-webkit-border-radius: 10px;
-			border-radius: 10px;
-			background: #e9ebef;
-		}
+		height: 400px;
+		overflow-y: scroll;
+	}
+	::-webkit-scrollbar {
+		width: 7px;
+	}
+	::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		background: #e9ebef;
+		height: 150px;
 	}
 `
 
@@ -137,9 +194,12 @@ const StyledTable = styled(Table)`
 	&.MuiTable-root {
 		border-collapse: separate;
 		border-spacing: 0px 10px;
+		width: 100%;
 	}
 `
-
+const Title = styled.p`
+	text-align: center;
+`
 const StyledTableCellHead = styled(TableCell)`
 	&.MuiTableCell-head {
 		border: none;
@@ -174,7 +234,6 @@ const StyledTableCellAction = styled(TableCell)`
 		padding: 5px;
 		width: 40px;
 		height: 40px;
-
 		background: #ffffff;
 		border: 1px solid #e9ebef;
 		border-radius: 45px;
@@ -185,6 +244,9 @@ const StyledTableCellAction = styled(TableCell)`
 		align-items: center;
 		gap: 20px;
 		margin-top: 34px;
+	}
+	svg {
+		cursor: pointer;
 	}
 `
 const StyledTableRow = styled(TableRow)`
@@ -197,14 +259,8 @@ const StyledTableRow = styled(TableRow)`
 const StyledImage = styled.img`
 	width: 100px;
 	height: 100px;
-`
-const Container = styled.div`
-	display: flex;
-	justify-content: space-between;
-	margin-top: 20px;
-	> div {
-		display: flex;
-		gap: 20px;
+	@media (max-width: 1020px) {
+		width: 80px;
+		height: 80px;
 	}
-	margin-bottom: 70px;
 `
