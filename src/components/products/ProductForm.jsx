@@ -32,11 +32,13 @@ export default ProductForm
 
 const Container = styled.div`
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: space-between;
 	margin-top: 20px;
 	margin-bottom: 70px;
 	> div {
 		display: flex;
 		gap: 20px;
+		flex-wrap: wrap;
 	}
 `

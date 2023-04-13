@@ -108,7 +108,7 @@ const Products = () => {
 							</TableRow>
 						</TableHead>
 
-						<TableBody>
+						<TableBody sx={{ paddingRight: '5px' }}>
 							{products.map((item) => {
 								return (
 									<StyledTableRow key={item.id}>
@@ -133,9 +133,7 @@ const Products = () => {
 										<StyledTableCell>
 											<p>{item.qty}</p>
 										</StyledTableCell>
-										<StyledTableCell
-										// sx={{ width: '100px' }}
-										>
+										<StyledTableCell>
 											<div>
 												<p>{item.price_1}$</p>
 												{item.price_2}$
@@ -179,6 +177,9 @@ const Wrapper = styled(Paper)`
 		border: none;
 		height: 400px;
 		overflow-y: scroll;
+		@media (max-width: 703px) {
+			/* margin-top: 30px; */
+		}
 	}
 	::-webkit-scrollbar {
 		width: 7px;
@@ -195,6 +196,7 @@ const StyledTable = styled(Table)`
 		border-collapse: separate;
 		border-spacing: 0px 10px;
 		width: 100%;
+		margin-right: 20px;
 	}
 `
 const Title = styled.p`

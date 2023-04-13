@@ -20,7 +20,7 @@ const Container = styled.main`
 	max-width: 1360px;
 	margin: 0 auto;
 	padding: 0 10px;
-	@media (max-width: 1020px) {
-		width: 1000px;
+	@media (max-width: 1000px) {
+		width: 100%;
 	}
 `

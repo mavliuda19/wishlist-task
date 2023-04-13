@@ -90,10 +90,12 @@ const Wrapper = styled.div`
 	margin-bottom: 5px;
 	display: flex;
 	justify-content: space-between;
+	flex-wrap: wrap;
 `
 const Container = styled.div`
 	display: flex;
 	gap: 30px;
+	flex-wrap: wrap;
 `
 
 export const StyledButton = styled(MuiButton)`
@@ -107,5 +109,8 @@ export const StyledButton = styled(MuiButton)`
 		flex: none;
 		order: 0;
 		flex-grow: 0;
+		@media (max-width: 703px) {
+			margin-top: 10px;
+		}
 	}
 `
